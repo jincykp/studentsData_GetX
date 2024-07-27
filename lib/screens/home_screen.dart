@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_management_getx/screens/add_details.dart';
+import 'package:student_management_getx/screens/full_view.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,6 +10,7 @@ class HomeScreen extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(140),
         child: AppBar(
+          foregroundColor: Colors.black,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(30),
@@ -35,28 +36,49 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: TextFormField(
-                      decoration: InputDecoration(
-                    hintText: 'Search...',
-                    contentPadding:
-                        const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
-                    prefixIcon: const Icon(Icons.search),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.circular(24)),
-                  )),
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      contentPadding:
+                          const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                            color:
+                                Colors.black), // Set the border color to black
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                            color: Colors
+                                .black), // Set the border color to black for enabled state
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                            color: Colors
+                                .black), // Set the border color to black for focused state
+                      ),
+                    ),
+                  ),
                 )
               ],
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.grid_view,
-                color: Colors.black,
-              ),
-            ),
-          ],
+          // actions: [
+          //   IconButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //               builder: (context) => const GridviewScreen()));
+          //     },
+          //     icon: const Icon(
+          //       Icons.grid_view,
+          //       color: Colors.black,
+          //     ),
+          //   ),
+          // ],
         ),
       ),
       body: SafeArea(
@@ -72,8 +94,15 @@ class HomeScreen extends StatelessWidget {
                       child: Card(
                         color: const Color.fromARGB(255, 177, 158, 158),
                         child: ListTile(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const FullViewScreen()));
+                          },
                           title: const Text(
-                            "jincy",
+                            "qwerty",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: const Text(
@@ -105,26 +134,26 @@ class HomeScreen extends StatelessWidget {
                     );
                   }),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionButton(
-                    backgroundColor: const Color.fromARGB(255, 160, 122, 122),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddStudentsData()));
-                    },
-                    child: const Icon(
-                      Icons.add,
-                    ),
-                  ),
-                ],
-              ),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.end,
+            //     children: [
+            //       FloatingActionButton(
+            //         backgroundColor: const Color.fromARGB(255, 160, 122, 122),
+            //         onPressed: () {
+            //           Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                   builder: (context) => const AddStudentsData()));
+            //         },
+            //         child: const Icon(
+            //           Icons.add,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // )
           ]),
         ),
       ),
