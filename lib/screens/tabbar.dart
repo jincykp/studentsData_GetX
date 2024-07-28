@@ -16,8 +16,8 @@ class _BottomTabBarssState extends State<BottomTabBarss> {
 
   final List<Widget> _pages = [
     const HomeScreen(),
-    const AddStudentsData(),
-    const GridviewScreen(),
+    AddStudentsData(),
+    GridviewScreen(),
   ];
 
   @override
