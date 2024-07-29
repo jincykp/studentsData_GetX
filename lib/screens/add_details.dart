@@ -89,6 +89,7 @@ class AddStudentsData extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 TextFormFields(
+                  keyboardType: TextInputType.number,
                   controller: ageController,
                   hintText: "Enter Your age",
                   validator: (value) {
@@ -100,6 +101,7 @@ class AddStudentsData extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 TextFormFields(
+                  keyboardType: TextInputType.number,
                   controller: registerNoController,
                   hintText: "Enter Your Register Number",
                   validator: (value) {
@@ -111,6 +113,7 @@ class AddStudentsData extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 TextFormFields(
+                  keyboardType: TextInputType.phone,
                   controller: contactController,
                   hintText: "Enter Your Contact Number",
                   validator: (value) {

@@ -13,6 +13,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final StudentController studentController = Get.find();
     final TextEditingController searchController = TextEditingController();
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(140),
@@ -34,8 +35,6 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 6),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              // Align column to bottom
-
               children: [
                 const SizedBox(
                   height: 60,
@@ -43,35 +42,36 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
-                        prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                              color: Colors
-                                  .black), // Set the border color to black
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                              color: Colors
-                                  .black), // Set the border color to black for enabled state
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                              color: Colors
-                                  .black), // Set the border color to black for focused state
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      contentPadding:
+                          const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          color: Colors.black,
                         ),
                       ),
-                      onChanged: (value) {
-                        studentController.searchStudent(value);
-                        Get.back();
-                      }),
-                )
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      studentController.searchStudent(value);
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -80,91 +80,102 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(6.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: studentController.studentList.length,
-                  itemBuilder: (context, index) {
-                    final StudentModel student =
-                        studentController.studentList[index];
-                    return SizedBox(
-                      height: 90,
-                      child: Card(
-                        color: const Color.fromARGB(255, 219, 190, 190),
-                        child: ListTile(
-                          onTap: () {
-                            Get.to(FullViewScreen(student: student));
-                          },
-                          title: Text(
-                            student.studentName ?? '',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            student.registerNumber ?? '',
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                          leading: CircleAvatar(
-                            radius: 25,
-                            backgroundImage:
-                                student.photo == null || student.photo!.isEmpty
-                                    ? const AssetImage('assets/download.png')
-                                    : FileImage(File(student.photo!))
-                                        as ImageProvider,
-                            child:
-                                student.photo == null || student.photo!.isEmpty
-                                    ? const Icon(Icons.person, size: 25)
-                                    : null,
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  Get.to(EditStudentDetails(student: student));
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Get.dialog(AlertDialog(
-                                    title: const Text("Delete"),
-                                    content: const Text(
-                                        "Are you sure you want delete this student details"),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Get.back();
-                                          },
-                                          child: const Text("Cancel")),
-                                      TextButton(
-                                          onPressed: () {
-                                            studentController
-                                                .deleteStudent(student);
-                                            Get.back();
-                                          },
-                                          child: const Text("Delete"))
-                                    ],
-                                  ));
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+          child: Obx(() {
+            final studentList = studentController.filteredStudentList.isEmpty &&
+                    searchController.text.isNotEmpty
+                ? []
+                : studentController.filteredStudentList.isEmpty
+                    ? studentController.studentList
+                    : studentController.filteredStudentList;
+
+            if (studentController.filteredStudentList.isEmpty &&
+                searchController.text.isNotEmpty) {
+              return const Center(
+                child: Text(
+                  "No students found",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
-          ),
+              );
+            }
+
+            return ListView.builder(
+              itemCount: studentList.length,
+              itemBuilder: (context, index) {
+                final StudentModel student = studentList[index];
+                return SizedBox(
+                  height: 90,
+                  child: Card(
+                    color: const Color.fromARGB(255, 219, 190, 190),
+                    child: ListTile(
+                      onTap: () {
+                        Get.to(FullViewScreen(student: student));
+                      },
+                      title: Text(
+                        student.studentName ?? '',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        student.registerNumber ?? '',
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                      leading: CircleAvatar(
+                        radius: 25,
+                        backgroundImage: student.photo == null ||
+                                student.photo!.isEmpty
+                            ? const AssetImage('assets/download.png')
+                            : FileImage(File(student.photo!)) as ImageProvider,
+                        child: student.photo == null || student.photo!.isEmpty
+                            ? const Icon(Icons.person, size: 25)
+                            : null,
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Get.to(EditStudentDetails(student: student));
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.black,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Get.dialog(AlertDialog(
+                                title: const Text("Delete"),
+                                content: const Text(
+                                    "Are you sure you want to delete this student details?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: const Text("Cancel"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      studentController.deleteStudent(student);
+                                      Get.back();
+                                    },
+                                    child: const Text("Delete"),
+                                  ),
+                                ],
+                              ));
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          }),
         ),
       ),
     );
