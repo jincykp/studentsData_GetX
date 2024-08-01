@@ -49,29 +49,21 @@ class EditStudentDetails extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         CircleAvatar(
-                          backgroundImage: pickimgController
-                                      .selectedimage.value !=
-                                  null
-                              ? FileImage(
-                                  pickimgController.selectedimage.value!)
-                              : (student.photo != null &&
+                          backgroundImage:
+                              pickimgController.selectedimage.value != null
+                                  ? FileImage(
+                                      pickimgController.selectedimage.value!)
+                                  : (student.photo != null &&
                                           student.photo!.isNotEmpty
                                       ? FileImage(File(student.photo!))
-                                      : const AssetImage("assets/download.png"))
-                                  as ImageProvider,
+                                      : null) as ImageProvider?,
                           radius: 60,
-                          child: pickimgController.selectedimage.value == null
-                              ? IconButton(
-                                  onPressed: () {
-                                    pickImage(pickimgController);
-                                  },
-                                  icon: const Icon(
-                                    Icons.person,
-                                    size: 60,
-                                    color: Color.fromARGB(255, 82, 81, 81),
-                                  ),
-                                )
-                              : null,
+                          backgroundColor:
+                              pickimgController.selectedimage.value == null &&
+                                      (student.photo == null ||
+                                          student.photo!.isEmpty)
+                                  ? Colors.grey[300]
+                                  : Colors.transparent,
                         ),
                         Positioned(
                           bottom: -5,
@@ -144,7 +136,8 @@ class EditStudentDetails extends StatelessWidget {
                           ageController.text.trim(),
                           regController.text.trim(),
                           phnController.text.trim(),
-                          pickimgController.selectedimage.value?.path ?? ''),
+                          pickimgController.selectedimage.value?.path ??
+                              student.photo!),
                       child: const Text("SUBMIT"),
                     ),
                   ],
@@ -157,11 +150,11 @@ class EditStudentDetails extends StatelessWidget {
     );
   }
 
-  saveStudent(StudentModel key, String name, String age, String place,
+  saveStudent(StudentModel key, String name, String age, String regno,
       String phone, String photo) async {
-    await studentController.updateStudent(key, name, age, phone, photo, age);
+    await studentController.updateStudent(key, name, age, regno, phone, photo);
     Get.back();
-    Get.snackbar('Updated', 'student details has been updated successfully',
+    Get.snackbar('Updated', 'student details have been updated successfully',
         snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
   }
 

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:student_management_getx/controller/student_controller.dart';
 import 'package:student_management_getx/model/student_model.dart';
-import 'package:student_management_getx/screens/edit_screen.dart';
 import 'package:student_management_getx/screens/full_view.dart';
 import 'package:student_management_getx/screens/gridview.dart';
 
@@ -136,48 +135,6 @@ class HomeScreen extends StatelessWidget {
                         child: student.photo == null || student.photo!.isEmpty
                             ? const Icon(Icons.person, size: 25)
                             : null,
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Get.to(EditStudentDetails(student: student));
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.black,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Get.dialog(AlertDialog(
-                                title: const Text("Delete"),
-                                content: const Text(
-                                    "Are you sure you want to delete this student details?"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    child: const Text("Cancel"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      studentController.deleteStudent(student);
-                                      Get.back();
-                                    },
-                                    child: const Text("Delete"),
-                                  ),
-                                ],
-                              ));
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ),

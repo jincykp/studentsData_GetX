@@ -82,6 +82,9 @@ class StudentController extends GetxController {
     studentRxList[index].photo = photo;
 
     await studentBox.put(studentRxList[index].key, studentRxList[index]);
+
+    // Notify the listeners about the update
+    studentRxList.refresh();
   }
 
   Future<void> deleteStudent(StudentModel student) async {
@@ -89,14 +92,16 @@ class StudentController extends GetxController {
     studentRxList.remove(student);
   }
 
-  searchStudent(String query) {
+  void searchStudent(String query) {
     if (query.isEmpty) {
       filteredStudentList.clear();
     } else {
-      List<StudentModel> result = studentRxList
-          .where((student) =>
-              student.studentName!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      List<StudentModel> result = studentRxList.where((student) {
+        return student.studentName!
+                .toLowerCase()
+                .contains(query.toLowerCase()) ||
+            student.registerNumber!.toLowerCase().contains(query.toLowerCase());
+      }).toList();
       filteredStudentList.assignAll(result);
     }
   }
