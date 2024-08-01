@@ -24,7 +24,7 @@ class GridviewScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Get.to(const BottomTabBarss());
+                Get.to(const HomeScreen());
               },
               icon: const Icon(
                 Icons.list,

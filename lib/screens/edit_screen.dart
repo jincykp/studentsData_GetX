@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:student_management_getx/controller/student_controller.dart';
@@ -18,14 +19,14 @@ class EditStudentDetails extends StatelessWidget {
     // Initialize the controllers with existing student data
     nameController.text = student.studentName ?? '';
     ageController.text = student.age ?? '';
-    regController.text = student.registerNumber ?? '';
-    phnController.text = student.phoneNumber ?? '';
+    registerNoController.text = student.registerNumber ?? '';
+    contactController.text = student.phoneNumber ?? '';
   }
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
-  final TextEditingController regController = TextEditingController();
-  final TextEditingController phnController = TextEditingController();
+  final TextEditingController registerNoController = TextEditingController();
+  final TextEditingController contactController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,39 +89,64 @@ class EditStudentDetails extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Name is required';
+                    } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+                      return 'Name can only contain letters';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 15),
                 TextFormFields(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(2)
+                  ],
+                  keyboardType: TextInputType.number,
                   controller: ageController,
                   hintText: "Enter Your age",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Age is required';
                     }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                TextFormFields(
-                  controller: regController,
-                  hintText: "Enter Your Register Number",
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Register Number is required';
+                    final age = int.tryParse(value);
+                    if (age == null || age < 1 || age > 99) {
+                      return 'Age must be between 1 and 99';
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 15),
                 TextFormFields(
-                  controller: phnController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(6)
+                  ],
+                  keyboardType: TextInputType.number,
+                  controller: registerNoController,
+                  hintText: "Enter Your Register Number",
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Register Number is required';
+                    } else if (value.length != 6) {
+                      return 'Register Number must be 6 digits';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                TextFormFields(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10)
+                  ],
+                  keyboardType: TextInputType.phone,
+                  controller: contactController,
                   hintText: "Enter Your Contact Number",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Contact number is required';
+                    } else if (value.length != 10) {
+                      return 'Contact number must be 10 digits';
                     }
                     return null;
                   },
@@ -134,8 +160,8 @@ class EditStudentDetails extends StatelessWidget {
                           student,
                           nameController.text.trim(),
                           ageController.text.trim(),
-                          regController.text.trim(),
-                          phnController.text.trim(),
+                          registerNoController.text.trim(),
+                          contactController.text.trim(),
                           pickimgController.selectedimage.value?.path ??
                               student.photo!),
                       child: const Text("SUBMIT"),

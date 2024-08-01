@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:student_management_getx/model/student_model.dart';
-import 'package:student_management_getx/screens/tabbar.dart';
+import 'package:student_management_getx/screens/home_screen.dart';
 
 class StudentController extends GetxController {
   RxList<StudentModel> studentRxList = <StudentModel>[].obs;
@@ -58,7 +58,7 @@ class StudentController extends GetxController {
         backgroundColor: Colors.green,
         colorText: Colors.black,
       );
-      Get.offAll(() => const BottomTabBarss());
+      Get.offAll(() => const HomeScreen());
     } catch (e) {
       Get.snackbar(
         "Error",

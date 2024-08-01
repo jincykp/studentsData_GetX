@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:student_management_getx/controller/student_controller.dart';
 import 'package:student_management_getx/model/student_model.dart';
+import 'package:student_management_getx/screens/add_details.dart';
 import 'package:student_management_getx/screens/full_view.dart';
 import 'package:student_management_getx/screens/gridview.dart';
 
@@ -96,12 +97,24 @@ class HomeScreen extends StatelessWidget {
                     ? studentController.studentList
                     : studentController.filteredStudentList;
 
-            if (studentController.filteredStudentList.isEmpty &&
-                searchController.text.isNotEmpty) {
+            if (studentList.isEmpty) {
               return const Center(
-                child: Text(
-                  "No students found",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Add students Details",
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.normal),
+                    ),
+                    SizedBox(height: 10),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Get.to(AddStudentsData());
+                    //   },
+                    //   child: const Text("Add Student Data"),
+                    // ),
+                  ],
                 ),
               );
             }
@@ -142,6 +155,17 @@ class HomeScreen extends StatelessWidget {
               },
             );
           }),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 160, 122, 122),
+        onPressed: () {
+          Get.to(AddStudentsData());
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+          size: 37,
         ),
       ),
     );

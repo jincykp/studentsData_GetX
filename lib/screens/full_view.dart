@@ -42,14 +42,14 @@ class FullViewScreen extends StatelessWidget {
                     ),
                     Positioned(
                       top: -30,
-                      left: (MediaQuery.of(context).size.width / 2) - 60,
+                      left: (MediaQuery.of(context).size.width / 2) - 80,
                       child: CircleAvatar(
                         backgroundImage: updatedStudent.photo != null &&
                                 updatedStudent.photo!.isNotEmpty
                             ? FileImage(File(updatedStudent.photo!))
                             : const AssetImage("assets/download.png")
                                 as ImageProvider,
-                        radius: 60,
+                        radius: 80,
                         backgroundColor: const Color.fromARGB(255, 6, 1, 20),
                       ),
                     ),
@@ -60,9 +60,9 @@ class FullViewScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 40),
                           Text(
-                            'Name: ${updatedStudent.studentName}',
+                            'Name : ${updatedStudent.studentName}',
                             style: const TextStyle(
                               color: Color.fromARGB(255, 0, 0, 0),
                               fontWeight: FontWeight.w900,
@@ -70,7 +70,7 @@ class FullViewScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            'Age: ${updatedStudent.age}',
+                            'Age : ${updatedStudent.age}',
                             style: const TextStyle(
                               color: Color.fromARGB(255, 0, 0, 0),
                               fontWeight: FontWeight.w900,
@@ -78,7 +78,7 @@ class FullViewScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            'Reg no: ${updatedStudent.registerNumber}',
+                            'Reg no : ${updatedStudent.registerNumber}',
                             style: const TextStyle(
                               color: Color.fromARGB(255, 0, 0, 0),
                               fontWeight: FontWeight.w900,
@@ -86,7 +86,7 @@ class FullViewScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            'Phone No: ${updatedStudent.phoneNumber}',
+                            'Phone No : ${updatedStudent.phoneNumber}',
                             style: const TextStyle(
                               color: Color.fromARGB(255, 0, 0, 0),
                               fontWeight: FontWeight.w900,
