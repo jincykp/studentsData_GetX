@@ -5,6 +5,7 @@ import 'package:student_management_getx/controller/student_controller.dart';
 import 'package:student_management_getx/model/student_model.dart';
 import 'package:student_management_getx/screens/edit_screen.dart';
 import 'package:student_management_getx/screens/full_view.dart';
+import 'package:student_management_getx/screens/gridview.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,6 +32,14 @@ class HomeScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Get.to(GridviewScreen());
+              },
+              icon: const Icon(Icons.grid_view, size: 30),
+            )
+          ],
           flexibleSpace: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 6),
             child: Column(

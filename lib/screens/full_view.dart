@@ -1,16 +1,18 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:student_management_getx/controller/student_controller.dart';
 import 'package:student_management_getx/model/student_model.dart';
+import 'package:student_management_getx/screens/edit_screen.dart';
 
 class FullViewScreen extends StatelessWidget {
   final StudentModel student;
-  const FullViewScreen({super.key, required this.student});
+  final StudentController studentController = Get.find();
+  FullViewScreen({super.key, required this.student});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  backgroundColor: const Color.fromARGB(255, 219, 190, 190),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 160, 122, 122),
         title: const Text(
@@ -21,18 +23,16 @@ class FullViewScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 50,
-            ),
+            const SizedBox(height: 50),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   const Card(
                     color: Color.fromARGB(255, 160, 122, 122),
                     child: SizedBox(
-                      height: 500,
+                      height: 400,
                       width: double.infinity,
                     ),
                   ),
@@ -47,13 +47,6 @@ class FullViewScreen extends StatelessWidget {
                                   as ImageProvider,
                       radius: 60,
                       backgroundColor: const Color.fromARGB(255, 6, 1, 20),
-                      child: student.photo != null && student.photo!.isNotEmpty
-                          ? null
-                          : const Icon(
-                              Icons.person,
-                              size: 60,
-                              color: Colors.white,
-                            ),
                     ),
                   ),
                   Positioned(
@@ -64,81 +57,84 @@ class FullViewScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 30),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 130,
-                              child: Text(
-                                'Name:',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              student.studentName ?? ' ',
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ],
+                        Text(
+                          'Name: ${student.studentName}',
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 130,
-                              child: Text(
-                                'Age:',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              student.age ?? ' ',
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ],
+                        Text(
+                          'Age: ${student.age}',
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 130,
-                              child: Text(
-                                'Reg no:',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              student.registerNumber ?? ' ',
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ],
+                        Text(
+                          'Reg no: ${student.registerNumber}',
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 130,
-                              child: Text(
-                                'Phone No:',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              student.phoneNumber ?? ' ',
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ],
+                        Text(
+                          'Phone No: ${student.phoneNumber}',
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Get.to(EditStudentDetails(student: student));
+                                },
+                                child: const Text(
+                                  "EDIT",
+                                  style: TextStyle(color: Colors.black),
+                                )),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  Get.dialog(AlertDialog(
+                                    title: const Text("Delete"),
+                                    content: const Text(
+                                        "Are you sure you want to delete this student details?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          studentController
+                                              .deleteStudent(student);
+                                          Get.back();
+                                        },
+                                        child: const Text("Delete"),
+                                      ),
+                                    ],
+                                  ));
+                                },
+                                child: const Text(
+                                  "DELETE",
+                                  style: TextStyle(color: Colors.black),
+                                )),
+                          ],
+                        )
                       ],
                     ),
                   ),

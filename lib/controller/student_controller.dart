@@ -20,29 +20,53 @@ class StudentController extends GetxController {
   }
 
   List<StudentModel> get studentList => studentRxList.toList();
-
   Future<void> loadStudents() async {
-    studentRxList.assignAll(studentBox.values.toList().cast<StudentModel>());
-    studentBox.watch().listen((event) => studentRxList
-        .assignAll(studentBox.values.toList().cast<StudentModel>()));
+    final List<StudentModel> studentsFromBox =
+        studentBox.values.toList().cast<StudentModel>();
+    studentRxList.assignAll(studentsFromBox);
+    studentBox.watch().listen((event) {
+      final updatedStudents = studentBox.values.toList().cast<StudentModel>();
+      studentRxList.assignAll(updatedStudents);
+    });
   }
 
   Future<void> addStudentDetails(StudentModel student) async {
     print("add fun called");
     try {
+      final existingStudent = studentRxList.firstWhereOrNull(
+        (s) => s.registerNumber == student.registerNumber,
+      );
+
+      if (existingStudent != null) {
+        Get.snackbar(
+          "Error",
+          "Student with this register number already exists",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.black,
+        );
+        return;
+      }
+
       await studentBox.add(student);
       studentRxList.add(student);
 
-      Get.snackbar("Success", "Student data successfully added",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.black);
+      Get.snackbar(
+        "Success",
+        "Student data successfully added",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.black,
+      );
       Get.offAll(() => const BottomTabBarss());
     } catch (e) {
-      Get.snackbar("Error", "Failed to add Student Data: $e",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.black);
+      Get.snackbar(
+        "Error",
+        "Failed to add Student Data: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.black,
+      );
     }
   }
 
